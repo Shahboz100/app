@@ -5,13 +5,15 @@ from datetime import timedelta
 import connection
 import json
 from datetime import date
+
+
 '''
     Внешние файлы проекта
 '''
 import clients
 import drivers
 import carcase
-
+import ads
 
 class Driver(object):
     def __init__(self, id, name, surname, tel, password,location,status,balance,email,date,access):
@@ -96,7 +98,6 @@ def protected():
     Получение информации о всех водителях
 """
 @app.route('/drivers', methods=['GET'])
-@jwt_required()
 def get_drivers():
     return jsonify({'drivers': drivers.get_drivers()})
 
@@ -105,12 +106,12 @@ def get_drivers():
 """
 @app.route('/driver', methods=['POST'])
 def post_driver():
-    
     """
         Проверка целостности POST запроса
     """
     if not request.json or not 'name' in request.json or not 'surname' in request.json or not 'password' in request.json or not 'tel' in request.json:
         return make_response(jsonify({'error':'incomplete data'}))
+    
     """
         Получение информации из POST запроса
         Запись в базу данных
@@ -126,7 +127,7 @@ def post_driver():
 @jwt_required()
 def driver(id_driver):
     return jsonify(response=drivers.get_driver(id_driver))
-    
+
 '''
     Получение информации о кузове
 '''
@@ -163,6 +164,17 @@ def client():
 @jwt_required()
 def get_client(id_clienta):
     return jsonify(response=clients.get_client(id_clienta))
-    
+
+
+"""
+    Получение объявлений
+"""
+@app.route('/news',methods=['GET'])
+def get_ads():
+    add = None
+    if request.args.get('addres')!=None:
+        add = request.args.get('addres')
+    return jsonify(response=ads.get_ads(add))
+
 if __name__ == '__main__':
     app.run()

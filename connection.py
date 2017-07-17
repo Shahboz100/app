@@ -1,8 +1,7 @@
 import pymysql
 def con():
-    return pymysql.connect(host='mysql.j685148.myjino.ru',
-                           user='j685148',
-                           passwd='BvWrvc3v9',
-                           db='j685148_fff',
+    return pymysql.connect(host='localhost',
+                           user='root',
+                           passwd='',
+                           db='database',
                            charset='utf8')
-
